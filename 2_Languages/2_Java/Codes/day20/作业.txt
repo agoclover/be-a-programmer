@@ -1,0 +1,21 @@
+==String str = null;
+StringBuffer sb = new StringBuffer();
+sb.append(str);
+
+System.out.println(sb.length());//
+
+System.out.println(sb);//
+
+StringBuffer sb1 = new StringBuffer(str);
+System.out.println(sb1);//
+
+字符串的练习再写几遍
+
+创建Set集合, 保存10个随机数, 再把这些数复制到List集合中
+找出最大值, 对List集合排序.
+
+写自定义类Person, 属性name, age, gender
+创建HashSet集合, 添加几个对象, 对象中有一些是属性完全相同的, 默认能否去重???
+如果想要达到去重的效果, 如何做?
+
+

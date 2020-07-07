@@ -1,0 +1,56 @@
+utf8 编码字符，称为可变长度字符编码. 
+e6 88 91 
+1110 0110 1000 1000 1001 0001 
+可变长度就是指从最左边开始数有几个连续的1. 有3个连续的1说明这个字符的编码用的是3个字节
+后面的每个字节必须要以10为开头. 是一个标记, 不是数据部分. 
+如果要想取数据部分, 需要把长度标记1110去掉, 每个字节的10头去掉
+1110 0110 1000 1000 1001 0001
+0110 00 1000 01 0001 
+0110 0010 0001 0001 => 0x6211 => 25105, 就是'我'字的Unicode编码.
+
+UTF8是unicode的一种实现方式
+utf16 固定双字节表示字符码值
+
+61
+0110 0001 没有连续的1, 表明它是1个字节, 它就是'a'的unicode码值.
+
+CE D2 也是一个码值, 就是'我'字的码值. 是GBK编码. 52946
+
+utf8编码适用于国际化, 虽然不省空间(每个汉字3字节), 国际化.
+GBK编码适用于本地化, 又省空间(每个汉字2字节),又符合本地习惯
+
+@Test
+    public void test8() throws UnsupportedEncodingException {
+        int n = 0x6211;
+        System.out.println((char)n);
+        String s1 = "abc我和你qqq"; // 在程序中， 字符串永远是Unicode字符序列。
+        // 如果要把字符串保存文件或网络传输，必须要编码。为了省空间和高效通用。
+
+        // 读文件时是解码
+
+        int n2 = 0xCED2;
+        System.out.println((char)n2);
+
+        // 编码 ：字符串 => 字节数组， 为了保存字符串
+        // 存文件时是编码
+        //byte[] bytes1 = s1.getBytes();// 编码, 默认使用的是utf8,和项目设置一致
+        byte[] bytes1 = s1.getBytes("utf8"); // 使用指定的编码方式编码
+        for (int i = 0; i < bytes1.length; i++) {
+            System.out.print(Integer.toHexString(bytes1[i]) + " ");
+        }
+        System.out.println();
+
+        byte[] bytes2 = s1.getBytes("gbk");
+        for (int i = 0; i < bytes2.length; i++) {
+            System.out.print(Integer.toHexString(bytes2[i]) + " ");
+        }
+        System.out.println();
+
+        // 解码 ：字节数组 => 字符串， 为了读取内容转成字符串
+        //String ss1 = new String(bytes1); // 使用默认的编码方式解码
+        String ss1 = new String(bytes1, "utf8"); // 使用指定的编码方式解码
+        System.out.println(ss1);
+
+        String ss2 = new String(bytes2, "gbk"); // 把2个字节的gbk码 查表对应到相应的unicode码
+        System.out.println(ss2);
+    }
